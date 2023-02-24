@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\StageType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Stage;
@@ -60,4 +63,27 @@ class StageController extends AbstractController
             'stage' => $stage,
         ]);
     }
+
+    /**
+     * Créer un nouveau stage.
+     * @Route("/nouveau-stage", name="stage.create")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     */
+    public function create(Request $request, EntityManagerInterface $em) : Response
+    {
+        $stage = new Stage();
+        $form = $this->createForm(StageType::class, $stage);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($stage);
+            $em->flush();
+            return $this->redirectToRoute('stage.list');
+        }
+        return $this->render('stage/create.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 }
