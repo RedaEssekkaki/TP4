@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% if categories is empty %}
+        <p>Aucune catégorie n'a de stages non expirés.</p>
+    {% else %}
+
+            {% for categorie in categories %}
+                <th>{{ categorie.getNom()}}</th>
+                <table class="table text-center">
+                <tr>
+                    <th class="active text-center">Poste</th>
+                    <th class="active text-center">Societe</th>
+                    <th class="active text-center">Catégorie</th>
+                    <th class="active text-center">Ville</th>
+                </tr>
+                        {% if categorie.getStagesNonExpires() is empty %}
+                            <p>Aucun stage non expiré pour cette catégorie.</p>
+                        {% else %}
+                            <ul>
+                                {% for stage in categorie.getStagesNonExpires() %}
+                                        <tr>
+                                            <td><a href="{{ path('stage.show', {id: stage.id}) }}">{{ stage.poste }}</a></td>
+                                            <td>
+                                                <a href="#">
+                                                    {{ stage.societe }}
+                                                </a>
+                                            </td>
+                                            <td>{{ stage.categorie.getNom() }}</td>
+                                            <td>{{ stage.ville }}</td>
+                                        </tr>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                </table>
+            {% endfor %}
+
+    {% endif %}
+{% endblock %}
+
