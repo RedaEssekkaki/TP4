@@ -83,7 +83,55 @@ class StageController extends AbstractController
         }
         return $this->render('stage/create.html.twig', [
             'form' => $form->createView(),
+            'editMode' => false,
         ]);
+    }
+
+    /**
+     * Éditer un stage.
+     * @Route("stage/{id}/edit", name="stage.edit")
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse|Response
+     */
+    public function edit(Request $request, Stage $stage, EntityManagerInterface $em) : Response
+    {
+        $form = $this->createForm(StageType::class, $stage);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return $this->redirectToRoute('stage.list');
+        }
+        return $this->render('stage/create.html.twig', [
+            'form' => $form->createView(),
+            'editMode' => true, //variable qui indique qu'on est en mode édition
+        ]);
+    }
+
+    /**
+     * Supprimer un stage.
+     * @Route("stage/{id}/delete", name="stage.delete")
+     * @param Request $request
+     * @param Stage $stage
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function delete(Request $request, Stage $stage, EntityManagerInterface $em) : Response
+    {
+        $form = $this->createFormBuilder()
+            ->setAction($this->generateUrl('stage.delete', ['id' => $stage->getId()]))
+            ->getForm();
+        $form->handleRequest($request);
+        if ( ! $form->isSubmitted() || ! $form->isValid()) {
+            return $this->render('stage/delete.html.twig', [
+                'stage' => $stage,
+                'form' => $form->createView(),
+            ]);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($stage);
+        $em->flush();
+        return $this->redirectToRoute('stage.list');
     }
 
 }

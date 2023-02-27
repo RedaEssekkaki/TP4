@@ -1,14 +1,18 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Création d'annonce de stage :</h1>
+    <h1>{% if editMode %}Édition{% else %}Création{% endif %} d'annonce de stage :</h1>
 
     {{ form_start(form) }}
     {{ form_widget(form) }}
 
     <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Enregistrer</button>
+            {% if editMode %}
+                <button type="submit" class="btn btn-default">Modifier</button>
+            {% else %}
+                <button type="submit" class="btn btn-default">Enregistrer</button>
+            {% endif %}
         </div>
     </div>
     {{ form_end(form) }}
