@@ -11,14 +11,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Stage;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\StageRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+/**
+ * Require ROLE_USER for *every* controller method in this class.
+ *
+ * //@IsGranted("ROLE_USER")
+ */
 
 class StageController extends AbstractController
 {
-    /**
-     * Lister tous les stages.
-     * @Route("/stage/", name="stage.list")
-     * @return Response
-     */
+
+
 /*    public function list() : Response
     {
         $stages = $this->getDoctrine()->getRepository(Stage::class)->findAll();
