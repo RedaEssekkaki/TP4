@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * Require ROLE_USER for *every* controller method in this class.
  *
- * //@IsGranted("ROLE_USER")
+ * @IsGranted("ROLE_USER")
  */
 
 class StageController extends AbstractController
